@@ -1,0 +1,19 @@
+server:
+  port: 8000
+int_server:
+  port: 8001
+
+redis:
+  url: "localhost:6379"
+  password: ""
+
+postgres:
+  url: "localhost:5432"
+  user: "user_local"
+  password: "user"
+  database: "user"
+
+cache_enabled: true
+
+logger:
+  level: debug
