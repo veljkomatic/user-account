@@ -2,6 +2,20 @@
 version: '3.6'
 
 services:
+  webapp:
+    build:
+      context: .  # Use . if the Dockerfile is in the same directory
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      MY_SERVICE_NAME: "user-account-server"
+      SERVICE_VERSION: "1.0.0"
+      MY_DEPLOYMENT_NAME: "local"
+      # Add other environment variables as needed
+
   redis:
     image: redis:5.0.5
     restart: unless-stopped

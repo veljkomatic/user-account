@@ -4,11 +4,11 @@ int_server:
   port: 8001
 
 redis:
-  url: "localhost:6379"
+  url: "redis:6379"
   password: ""
 
 postgres:
-  url: "localhost:5432"
+  url: "postgres:5432"
   user: "user_local"
   password: "user"
   database: "user"

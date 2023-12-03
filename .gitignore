@@ -22,5 +22,8 @@ go.work
 
 container_data/
 
+build/
+config/
+
 .DS_Store
 ```
