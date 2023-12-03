@@ -21,3 +21,6 @@
 go.work
 
 container_data/
+
+.DS_Store
+```

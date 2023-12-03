@@ -1,5 +1,0 @@
-postgres:
-  url: "localhost:5432"
-  user: "user_local"
-  password: "user"
-  database: "user"

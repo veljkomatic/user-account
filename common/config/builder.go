@@ -2,6 +2,7 @@ package config
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -78,10 +79,13 @@ func (cb *ConfigBuilder[T]) LoadConfig(path string) (T, error) {
 func (cb *ConfigBuilder[T]) getConfigFilePath() string {
 	configDir := cb.envAccessor.GetEnv("USER_ACCOUNT_CONFIG_PATH")
 	if configDir == "" {
-		configDir = "/Users/veljkomatic/Code/user-account/cmd/server" // Default to current directory if not set
-		// FIXME: this is not a good default
+		cwd, err := os.Getwd()
+		if err != nil {
+			log.Warn(context.TODO(), fmt.Sprintf("Error getting current working directory: %s", err.Error()))
+			// Handle the error, maybe fallback to a default config directory
+		}
+		configDir = cwd // Use the current working directory
 	}
-
 	currentEnv := environment.Get(cb.envAccessor)
 
 	var configFile string
