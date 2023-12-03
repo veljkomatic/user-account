@@ -1,0 +1,156 @@
+---
+# This file configures github.com/golangci/golangci-lint.
+
+run:
+  # default concurrency is a available CPU number
+  #concurrency: 4
+  # timeout for analysis, e.g. 30s, 5m, default is 1m
+  timeout: 10m
+  # exit code when at least one issue was found, default is 1
+  issues-exit-code: 1
+  # include test files or not, default is true
+  tests: true
+
+# output configuration options
+output:
+  # colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml|github-actions
+  # default is "colored-line-number"
+  format: colored-line-number
+  # print lines of code with issue, default is true
+  print-issued-lines: true
+  # print linter name in the end of issue text, default is true
+  print-linter-name: true
+  # make issues output unique by line, default is true
+  uniq-by-line: true
+  # add a prefix to the output file references; default is no prefix
+  path-prefix: ""
+  # sorts results by: filepath, line and column
+  sort-results: true
+
+linters:
+  disable-all: true
+  enable:
+    - govet
+    - reassign
+    - staticcheck
+    - dogsled
+  fast: false
+
+issues:
+  # Show only new issues: if there are unstaged changes or untracked files,
+  # only those changes are analyzed, else only changes in HEAD~ are analyzed.
+  # It's a super-useful option for integration of golangci-lint into existing
+  # large codebase. It's not practical to fix all existing issues at the moment
+  # of integration: much better don't allow issues in new code.
+  # Default is false.
+  new: false
+  # Fix found issues (if it's supported by the linter)
+  fix: true
+
+linters-settings:
+  # checks assignments with too many blank identifiers;
+  dogsled:
+    max-blank-identifiers: 4
+
+  # checks ignored error checking
+  errcheck:
+    # report about not checking of errors in type assertions: `a := b.(MyStruct)`;
+    # default is false: such cases aren't reported by default.
+    check-type-assertions: true
+
+    # report about assignment of errors to blank identifier: `num, _ := strconv.Atoi(numStr)`;
+    # default is false: such cases aren't reported by default.
+    check-blank: false
+
+  govet:
+    new: false
+    check-shadowing: false # revive does this for us faster, also we don't actually care
+
+  # Check our staticcheck configuration.
+  staticcheck:
+    new: false
+    checks: ["all", "-SA1*", "-SA2*", "-SA3*", "-SA4*", "-SA5*", "-SA6*", "-SA9*", "-S1*", "-ST1*", "-U1*"]
+  revive:
+    # see https://github.com/mgechev/revive#available-rules for details.
+    ignore-generated-header: true
+    enable-all-rules: false
+    severity: warning
+    confidence: 0.8
+    error-code: 1
+    warning-code: 0
+    directives:
+      - name: specify-disable-reason
+        severity: error
+    rules:
+      # Warnings
+
+      # Empty blocks of code
+      - name: empty-block
+        disabled: false
+      # If's which end with a return, and unneded indentations.
+      - name: indent-error-flow
+        disabled: false
+      # If early return is possible use instead of if/else
+      - name: early-return
+        disabled: false
+      - name: if-return
+        disabled: false
+      - name: optimize-operands-order
+        disabled: false
+      - name: superfluous-else
+        disabled: false
+
+      # Errors
+
+      # Modifies parameter passed to the function
+      - name: modifies-parameter
+        severity: warning
+        disabled: false
+
+      # Context not being the first argument of the function (only if it's present.)
+      - name: context-as-argument
+        severity: error
+        disabled: false
+      # Switches which can be if-else's
+      - name: unnecessary-stmt
+        severity: error
+        disabled: false
+      # Consistent receiver naming.
+      - name: receiver-naming
+        severity: warning
+        disabled: false
+      # Naming and Id -> ID on non generated files and such
+      - name: var-naming
+        severity: error
+        disabled: false
+      # Atomic package bad usage
+      - name: atomic
+        severity: error
+        disabled: false
+      - name: waitgroup-by-value
+        severity: error
+        disabled: false
+      # Bare return
+      - name: bare-return
+        severity: error
+        disabled: false
+      # Suggests removing Boolean literals from logic expressions.
+      - name: bool-literal-in-expr
+        severity: error
+        disabled: false
+      # Context keys must be types
+      - name: context-keys-type
+        severity: error
+        disabled: false
+      # This rule warns when assigning the address of the variable, passing the address to append() or using it in a map.
+      - name: range-val-address
+        severity: error
+        disabled: false
+      # This rule warns when a range value (or index) is used inside a closure
+      - name: range-val-in-closure
+        severity: error
+        disabled: false
+      # Forces any instead of interface{}
+      - name: use-any
+        severity: error
+        disabled: false

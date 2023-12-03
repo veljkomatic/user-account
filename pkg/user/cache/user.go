@@ -17,12 +17,12 @@ type UserCache interface {
 }
 
 type userCache struct {
-	redis *redis.Client
+	redis redis.Client
 }
 
 var _ UserCache = (*userCache)(nil)
 
-func NewUserCache(redisClient *redis.Client) UserCache {
+func NewUserCache(redisClient redis.Client) UserCache {
 	return &userCache{
 		redis: redisClient,
 	}

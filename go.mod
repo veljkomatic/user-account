@@ -19,6 +19,7 @@ require (
 	github.com/go-redis/redis v6.15.9+incompatible // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/golang-migrate/migrate/v4 v4.16.2 // indirect
+	github.com/golang/mock v1.6.0 // indirect
 	github.com/google/uuid v1.4.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
@@ -37,6 +38,7 @@ require (
 	github.com/rs/cors v1.8.1 // indirect
 	github.com/rs/cors/wrapper/gin v0.0.0-20231013084403-73f81b45a644 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
+	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect

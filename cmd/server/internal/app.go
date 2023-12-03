@@ -22,7 +22,7 @@ type UserAccountServer struct {
 	httpServerHandler http.Handler
 	httpServer        *server.Server
 	postgresClient    *postgres.Client
-	redisClient       *redis.Client
+	redisClient       redis.Client
 }
 
 // NewUserAccountServer creates a new UserAccountServer instance
