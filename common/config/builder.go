@@ -14,9 +14,10 @@ import (
 )
 
 const (
-	ConfigFileLocal      = "config.local.yaml"
-	ConfigFileProduction = "config.production.yaml"
-	ConfigFileCanary     = "config.canary.yaml"
+	ConfigFileLocal       = "config.local.yaml"
+	ConfigFileProduction  = "config.production.yaml"
+	ConfigFileCanary      = "config.canary.yaml"
+	UserAccountConfigPath = "USER_ACCOUNT_CONFIG_PATH"
 )
 
 type ConfigBuilder[T Validator] struct {
@@ -77,7 +78,7 @@ func (cb *ConfigBuilder[T]) LoadConfig(path string) (T, error) {
 
 // getConfigFilePath determines the configuration file path based on the environment
 func (cb *ConfigBuilder[T]) getConfigFilePath() string {
-	configDir := cb.envAccessor.GetEnv("USER_ACCOUNT_CONFIG_PATH")
+	configDir := cb.envAccessor.GetEnv(UserAccountConfigPath)
 	if configDir == "" {
 		cwd, err := os.Getwd()
 		if err != nil {
