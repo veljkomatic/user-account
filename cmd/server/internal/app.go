@@ -34,7 +34,7 @@ func NewUserAccountServer() *UserAccountServer {
 
 // InitializeServer initializes UserAccountServer dependencies and configures the http server
 func InitializeServer(srv *UserAccountServer, cfg *Config) app.CtxBuilderOption {
-	return func(ctx context.Context, builder *app.AppBuilder) {
+	return func(ctx context.Context, builder *app.Builder) {
 		defer func() { srv.initialized = true }()
 
 		srv.redisClient = redis.MustConfigClient(ctx, cfg.Redis)
@@ -74,7 +74,7 @@ func initUserHandler(srv *UserAccountServer, cfg *Config) handler.UserHandler {
 // RegisterTasks registers tasks
 // Currently only http server task is active
 func (s *UserAccountServer) RegisterTasks(cfg *Config) app.CtxBuilderOption {
-	return func(ctx context.Context, builder *app.AppBuilder) {
+	return func(ctx context.Context, builder *app.Builder) {
 		if !s.initialized {
 			panic("user account server not initialized")
 		}

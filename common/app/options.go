@@ -5,9 +5,9 @@ import (
 	"strings"
 )
 
-// Name returns an AppBuilderOption that sets the name of the app.
-func Name(name ...string) AppBuilderOption {
-	return func(builder *AppBuilder) {
+// Name returns an BuilderOption that sets the name of the app.
+func Name(name ...string) BuilderOption {
+	return func(builder *Builder) {
 		appName := strings.Join(name, " ")
 		if appName != "" {
 			builder.appName = appName
@@ -15,17 +15,17 @@ func Name(name ...string) AppBuilderOption {
 	}
 }
 
-// TaskDelegate returns an AppBuilderOption that adds a task to the app.
-func TaskDelegate(taskName string, runFunc RunFunc) AppBuilderOption {
-	return func(builder *AppBuilder) {
+// TaskDelegate returns an BuilderOption that adds a task to the app.
+func TaskDelegate(taskName string, runFunc RunFunc) BuilderOption {
+	return func(builder *Builder) {
 		builder.addTask(taskName, runFunc)
 	}
 }
 
-// VersionFromEnv returns an AppBuilderOption that sets the version of the app to the value of the environment variable.
-// If envVar is not set, the version is set to "0.0.0".
-func VersionFromEnv(envAccessor environment.EnvAccessor) AppBuilderOption {
-	return func(builder *AppBuilder) {
+// VersionFromEnv returns an BuilderOption that sets the version of the app to the value of the environment variable.
+// If env var is not set, the version is set to "0.0.0".
+func VersionFromEnv(envAccessor environment.EnvAccessor) BuilderOption {
+	return func(builder *Builder) {
 		version := environment.ServiceVersion(envAccessor)
 		builder.SetVersion(version)
 	}

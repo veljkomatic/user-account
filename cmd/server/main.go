@@ -21,7 +21,7 @@ func main() {
 	envAccessor := environment.RealEnvAccessor{}
 
 	fullServiceName := environment.FullServiceName(ptr.From(envAccessor))
-	app.Builder(cfg).
+	app.NewBuilder(cfg).
 		With(app.Name(fullServiceName, "user-account-server")).
 		WithCtx(internal.InitializeServer(server, cfg)).
 		WithCtx(server.RegisterTasks(cfg)).

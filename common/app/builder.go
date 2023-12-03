@@ -8,8 +8,8 @@ import (
 	"github.com/veljkomatic/user-account/common/ptr"
 )
 
-// AppBuilder is a builder for App.
-type AppBuilder struct {
+// Builder is a builder for App.
+type Builder struct {
 	appName string
 	version string
 	options []CtxBuilderOption
@@ -23,13 +23,15 @@ type AppBuilder struct {
 	tasks            map[string]Task
 }
 
-type AppBuilderOption func(builder *AppBuilder)
+type BuilderOption func(builder *Builder)
 
-type CtxBuilderOption func(ctx context.Context, builder *AppBuilder)
+type CtxBuilderOption func(ctx context.Context, builder *Builder)
 
-func Builder(baseConfig config.BaseConfig) *AppBuilder {
+// NewBuilder creates new app builder.
+// currently we do not use config.BaseConfig, but we will use it in the future.
+func NewBuilder(baseConfig config.BaseConfig) *Builder {
 	envAccessor := environment.RealEnvAccessor{}
-	builder := &AppBuilder{
+	builder := &Builder{
 		appName:     environment.ServiceName(ptr.From(envAccessor)),
 		version:     environment.ServiceVersion(ptr.From(envAccessor)),
 		environment: environment.Get(ptr.From(envAccessor)),
@@ -42,41 +44,48 @@ func Builder(baseConfig config.BaseConfig) *AppBuilder {
 	return builder
 }
 
-func (ab *AppBuilder) Name() string {
-	return ab.appName
+// Name gets app name.
+func (b *Builder) Name() string {
+	return b.appName
 }
 
-func (ab *AppBuilder) With(options ...AppBuilderOption) *AppBuilder {
-	ab.options = append(ab.options, ab.wrapOptions(options...)...)
-	return ab
+// DeferCloser adds CtxCloseFunc to the app builder.
+func (b *Builder) DeferCloser(closer CtxCloseFunc) *Builder {
+	b.closers = append(b.closers, closer)
+	return b
 }
 
-func (ab *AppBuilder) addPostStopHandler(handler StopHandler) *AppBuilder {
-	ab.postStopHandlers = append(ab.postStopHandlers, handler)
-	return ab
+// With adds BuilderOption to the app builder.
+func (b *Builder) With(options ...BuilderOption) *Builder {
+	b.options = append(b.options, b.wrapOptions(options...)...)
+	return b
 }
 
-func (ab *AppBuilder) addPreStartHandler(handler StartHandler) *AppBuilder {
-	ab.preStartHandlers = append(ab.preStartHandlers, handler)
-	return ab
+// WithCtx adds CtxBuilderOption to the app builder.
+func (b *Builder) WithCtx(option ...CtxBuilderOption) *Builder {
+	b.options = append(b.options, option...)
+	return b
 }
 
-func (ab *AppBuilder) DeferCloser(closer CtxCloseFunc) *AppBuilder {
-	ab.closers = append(ab.closers, closer)
-	return ab
+// addPostStopHandler adds StopHandler to the app builder.
+func (b *Builder) addPostStopHandler(handler StopHandler) *Builder {
+	b.postStopHandlers = append(b.postStopHandlers, handler)
+	return b
 }
 
-func (ab *AppBuilder) WithCtx(option ...CtxBuilderOption) *AppBuilder {
-	ab.options = append(ab.options, option...)
-	return ab
+// addPreStartHandler adds StartHandler to the app builder.
+func (b *Builder) addPreStartHandler(handler StartHandler) *Builder {
+	b.preStartHandlers = append(b.preStartHandlers, handler)
+	return b
 }
 
-func (ab *AppBuilder) getAppName(ctx context.Context) string {
-	if ab.appName != "" {
-		return ab.appName
+// getAppName returns app name.
+func (b *Builder) getAppName(ctx context.Context) string {
+	if b.appName != "" {
+		return b.appName
 	}
 
-	if environment.Is(ab.envAccessor, environment.EnvDevelopment) {
+	if environment.Is(b.envAccessor, environment.EnvDevelopment) {
 		log.Warn(
 			ctx,
 			"App name not provided, using default app name. Provide app name or set fallback app name to avoid this warning.",
@@ -87,19 +96,21 @@ func (ab *AppBuilder) getAppName(ctx context.Context) string {
 	return ""
 }
 
-func (ab *AppBuilder) Build(ctx context.Context) *App {
+// Build builds App.
+func (b *Builder) Build(ctx context.Context) *App {
 	ctx, cancel := context.WithCancelCause(ctx)
-	for i := 0; i < len(ab.options); i++ {
-		ab.options[i](ctx, ab)
+	for i := 0; i < len(b.options); i++ {
+		option := b.options[i]
+		option(ctx, b)
 	}
 
-	appName := ab.getAppName(ctx)
+	appName := b.getAppName(ctx)
 	if appName == "" {
 		panic("app name must be non empty")
 	}
 
 	var tasks []Task
-	for _, task := range ab.tasks {
+	for _, task := range b.tasks {
 		tasks = append(tasks, task)
 	}
 
@@ -107,58 +118,64 @@ func (ab *AppBuilder) Build(ctx context.Context) *App {
 		ctx,
 		cancel,
 		appName,
-		ab.version,
-		ab.environment,
+		b.version,
+		b.environment,
 		tasks,
-		ab.postStopHandlers,
-		ab.closers,
-		ab.preStartHandlers,
+		b.postStopHandlers,
+		b.closers,
+		b.preStartHandlers,
 	)
 }
 
-func (ab *AppBuilder) SetVersion(version string) *AppBuilder {
+// SetVersion sets app version.
+func (b *Builder) SetVersion(version string) *Builder {
 	if version != "" {
-		ab.version = version
+		b.version = version
 	}
 
-	return ab
+	return b
 }
 
-func (ab *AppBuilder) SetEnv(env environment.Environment) *AppBuilder {
-	ab.environment = env
-	return ab
+// SetEnv sets app environment.
+func (b *Builder) SetEnv(env environment.Environment) *Builder {
+	b.environment = env
+	return b
 }
 
-func (ab *AppBuilder) setName(name string) *AppBuilder {
-	ab.appName = name
-	return ab
+// setName sets app name.
+func (b *Builder) setName(name string) *Builder {
+	b.appName = name
+	return b
 }
 
-func (ab *AppBuilder) addTask(taskName string, runFunc RunFunc) *AppBuilder {
+// addTask adds task to the app.
+func (b *Builder) addTask(taskName string, runFunc RunFunc) *Builder {
 	newTask := NewTask(taskName, runFunc)
-	_, duplicate := ab.tasks[newTask.Name()]
+	_, duplicate := b.tasks[newTask.Name()]
 	if duplicate {
 		log.Debug(
 			context.TODO(), "task with same name already added", log.Fields{
 				"task": newTask.Name(),
 			},
 		)
-		return ab
+		return b
 	}
-	ab.tasks[newTask.Name()] = newTask
-	return ab
+	b.tasks[newTask.Name()] = newTask
+	return b
 }
 
-func (ab *AppBuilder) wrapOption(option AppBuilderOption) CtxBuilderOption {
-	return func(ctx context.Context, builder *AppBuilder) {
+// wrapOption wraps BuilderOption into CtxBuilderOption
+func (b *Builder) wrapOption(option BuilderOption) CtxBuilderOption {
+	return func(ctx context.Context, builder *Builder) {
 		option(builder)
 	}
 }
 
-func (ab *AppBuilder) wrapOptions(options ...AppBuilderOption) []CtxBuilderOption {
+// wrapOptions wraps BuilderOption into CtxBuilderOption
+func (b *Builder) wrapOptions(options ...BuilderOption) []CtxBuilderOption {
 	var ctxOptions []CtxBuilderOption
 	for _, option := range options {
-		ctxOptions = append(ctxOptions, ab.wrapOption(option))
+		ctxOptions = append(ctxOptions, b.wrapOption(option))
 	}
 
 	return ctxOptions
