@@ -1,10 +1,12 @@
 package rest
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
+
 	"github.com/veljkomatic/user-account/pkg/user/api"
 	"github.com/veljkomatic/user-account/pkg/user/api/handler"
-	"net/http"
 )
 
 // rest controller for user

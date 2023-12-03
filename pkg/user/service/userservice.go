@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+
 	commonerrors "github.com/veljkomatic/user-account/common/errors"
 	"github.com/veljkomatic/user-account/pkg/user/domain"
 	"github.com/veljkomatic/user-account/pkg/user/repository"

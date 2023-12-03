@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/veljkomatic/user-account/common/log"
 	"github.com/veljkomatic/user-account/pkg/user/cache"
 	"github.com/veljkomatic/user-account/pkg/user/domain"

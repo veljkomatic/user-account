@@ -1,11 +1,9 @@
 package handler
 
 import (
+	"github.com/pkg/errors"
 	"html/template"
 	"net/http"
-	"regexp"
-
-	"github.com/pkg/errors"
 
 	"github.com/veljkomatic/user-account/pkg/user/domain"
 )
@@ -55,11 +53,5 @@ func validateName(name string) error {
 	if len(name) < 1 || len(name) > 50 {
 		return errors.New("name must be between 1 and 50 characters")
 	}
-	// Regex to allow letters, spaces, hyphens, and apostrophes
-	validNameRegex := regexp.MustCompile(`^[a-zA-Z\s'-]+$`)
-	if !validNameRegex.MatchString(name) {
-		return errors.New("name contains invalid characters")
-	}
-
 	return nil
 }

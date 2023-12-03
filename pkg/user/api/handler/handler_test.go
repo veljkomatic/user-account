@@ -2,11 +2,11 @@ package handler
 
 import (
 	"context"
-	"github.com/veljkomatic/user-account/common/errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"github.com/veljkomatic/user-account/common/errors"
 	"github.com/veljkomatic/user-account/pkg/user/api"
 	"github.com/veljkomatic/user-account/pkg/user/domain"
 	mockservice "github.com/veljkomatic/user-account/pkg/user/service/mock"

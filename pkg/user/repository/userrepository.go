@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+
 	"github.com/veljkomatic/user-account/common/ptr"
 	"github.com/veljkomatic/user-account/common/storage/sql/postgres"
 	"github.com/veljkomatic/user-account/pkg/user/domain"

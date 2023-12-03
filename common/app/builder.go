@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+
 	"github.com/veljkomatic/user-account/common/config"
 	"github.com/veljkomatic/user-account/common/environment"
 	"github.com/veljkomatic/user-account/common/log"

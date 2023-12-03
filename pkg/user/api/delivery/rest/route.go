@@ -2,6 +2,7 @@ package rest
 
 import (
 	"github.com/gin-gonic/gin"
+	
 	"github.com/veljkomatic/user-account/pkg/user/api/handler"
 )
 

@@ -19,7 +19,7 @@ func ErrIntegrityViolation(err error) bool {
 		return pgErr.IntegrityViolation()
 	}
 
-	// If the error has a cause, check if the cause is an pgdriver.Error
+	// If the error has a cause, check if the cause is pgdriver.Error
 	cause := errors.Cause(err)
 	if errors.As(cause, &pgErr) {
 		return pgErr.IntegrityViolation()

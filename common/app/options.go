@@ -1,8 +1,9 @@
 package app
 
 import (
-	"github.com/veljkomatic/user-account/common/environment"
 	"strings"
+	
+	"github.com/veljkomatic/user-account/common/environment"
 )
 
 // Name returns an BuilderOption that sets the name of the app.
