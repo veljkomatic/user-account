@@ -1,0 +1,70 @@
+definitions:
+  errors.ErrorResponse:
+    type: string
+  domain.User:
+    type: object
+    properties:
+      id:
+        description: ID is the unique identifier for the user
+        type: string
+      name:
+        description: Name is the name of the user
+        type: string
+      created_at:
+        description: CreatedAt is the time that the user was created
+        format: date-time
+        type: string
+      updated_at:
+          description: UpdatedAt is the time that the user was last updated
+          format: date-time
+          type: string
+info:
+  contact: {}
+paths:
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: Add a new user and return their ID
+      operationId: create-user
+      parameters:
+        - description: User name
+          in: body
+          name: name
+          required: true
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      summary: Create a new user
+  /users/{userID}:
+    get:
+      description: Retrieve user details by user ID
+      operationId: get-user-by-id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      summary: Get user by ID
+swagger: "2.0"
