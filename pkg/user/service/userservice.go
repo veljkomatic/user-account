@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"errors"
+	commonerrors "github.com/veljkomatic/user-account/common/errors"
 	"github.com/veljkomatic/user-account/pkg/user/domain"
 	"github.com/veljkomatic/user-account/pkg/user/repository"
 )
@@ -24,7 +26,14 @@ func NewUserService(repository repository.UserRepository) UserService {
 var _ UserService = (*userService)(nil)
 
 func (s *userService) GetUser(ctx context.Context, userID domain.UserID) (*domain.User, error) {
-	return s.repository.GetUserByID(ctx, userID)
+	user, err := s.repository.GetUserByID(ctx, userID)
+	if err != nil && errors.Is(err, commonerrors.ErrNotFound) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
 }
 
 func (s *userService) CreateUser(ctx context.Context, createUserParams *CreateUserParams, options ...UserOption) (*domain.User, error) {

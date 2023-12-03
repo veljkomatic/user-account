@@ -49,6 +49,9 @@ func (u *userHandler) GetUser(ctx api.APIContext, request *GetUserRequest) (*Get
 	if err != nil {
 		return nil, err
 	}
+	if user == nil {
+		return nil, nil
+	}
 	return ptr.From(GetUserResponse{
 		User: user,
 	}), nil

@@ -7,6 +7,8 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/uptrace/bun/driver/pgdriver"
+
+	commonerrors "github.com/veljkomatic/user-account/common/errors"
 )
 
 // ErrIntegrityViolation checks if there is a integrity violation, that is if the error is part of the
@@ -37,7 +39,7 @@ func HandleErr(err error) error {
 		return nil
 	}
 	if ErrNoRows(err) {
-		return errors.New("NotFound")
+		return commonerrors.ErrNotFound
 	}
 	if errors.Is(err, context.Canceled) {
 		return errors.New("Canceled context")

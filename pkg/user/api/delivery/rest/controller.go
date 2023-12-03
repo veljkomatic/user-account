@@ -22,17 +22,20 @@ func (uc *userController) GetUser(c *gin.Context) {
 	var req handler.GetUserRequest
 	err := c.ShouldBindUri(&req)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err)
+		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
 	ctx := c.Request.Context()
 	apiCtx := api.NewAPIContext(ctx)
 
-	// todo(Veljko) map error to find out status code, currently it is 500
 	userResponse, err := uc.handler.GetUser(apiCtx, &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+	if userResponse == nil {
+		c.JSON(http.StatusNotFound, nil)
 		return
 	}
 
@@ -42,21 +45,20 @@ func (uc *userController) GetUser(c *gin.Context) {
 func (uc *userController) CreateUser(c *gin.Context) {
 	var req handler.CreateUserRequest
 	if err := c.BindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, err)
+		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 	if err := req.ValidateRequest(); err != nil {
-		c.JSON(http.StatusBadRequest, err)
+		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
 	ctx := c.Request.Context()
 	apiCtx := api.NewAPIContext(ctx)
 
-	// todo(Veljko) map error to find out status code, currently it is 500
 	userResponse, err := uc.handler.CreateUser(apiCtx, &req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 
