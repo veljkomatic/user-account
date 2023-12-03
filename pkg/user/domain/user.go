@@ -13,9 +13,9 @@ type User struct {
 	ID   UserID `json:"id" bun:"type:uuid,notnull,pk"`
 	Name string `json:"name" bun:"type:varchar(255),notnull"`
 
-	CreatedAt time.Time  `json:"created_at" bun:"type:timestamptz,notnull,default:now()"`
-	UpdatedAt time.Time  `json:"updated_at" bun:"type:timestamptz,notnull,default:now()"`
-	DeleteAt  *time.Time `json:"delete_at" bun:"type:timestamptz"`
+	CreatedAt time.Time  `json:"created_at"                  bun:"created_at,type:datetime,notnull,default:current_timestamp"`
+	UpdatedAt time.Time  `json:"updated_at"                  bun:"updated_at,type:datetime"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"        bun:"deleted_at,type:datetime,soft_delete"`
 }
 
 func NewUser(name string) *User {

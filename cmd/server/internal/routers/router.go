@@ -18,7 +18,7 @@ func InitRouter(userHandler handler.UserHandler) *gin.Engine {
 	r.Use(gin.Recovery())
 
 	// User routes
-	userGroup := r.Group("/user")
+	userGroup := r.Group("/users")
 	userdelivery.SetupRoutes(userGroup, userHandler)
 
 	return r

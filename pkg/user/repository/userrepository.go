@@ -32,7 +32,7 @@ func NewUserRepository(idb postgres.IDB) UserRepository {
 func (r *repository) GetUserByID(ctx context.Context, userID domain.UserID) (*domain.User, error) {
 	var user domain.User
 	if err := r.idb.NewSelect().Model(&user).
-		Where("user.id = ?", userID).
+		Where("id = ?", userID).
 		Scan(ctx); err != nil {
 		return nil, postgres.HandleAndWrapErr(err, "failed to get user by id")
 	}

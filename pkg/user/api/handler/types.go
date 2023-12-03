@@ -40,7 +40,7 @@ func (r *CreateUserRequest) ValidateRequest() error {
 }
 
 type GetUserRequest struct {
-	UserID domain.UserID `uri:"containerID" binding:"required,uuid"`
+	UserID domain.UserID `uri:"userID" binding:"required,uuid"`
 }
 
 type GetUserResponse struct {

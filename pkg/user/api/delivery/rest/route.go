@@ -15,6 +15,6 @@ func SetupRoutes(
 
 func setupRoutes(userGroup *gin.RouterGroup, controller *userController) {
 	userGroup.
-		GET("/users/:userID", controller.GetUser).
-		POST("/users", controller.CreateUser)
+		GET("/:userID", controller.GetUser).
+		POST("/", controller.CreateUser)
 }

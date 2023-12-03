@@ -45,7 +45,11 @@ func (c *userCache) Invalidate(ctx context.Context, key string) error {
 }
 
 func (c *userCache) Set(ctx context.Context, key string, user *domain.User) error {
-	err := c.redis.Set(key, user, 0)
+	bytea, err := json.Marshal(user)
+	if err != nil {
+		return err
+	}
+	err = c.redis.Set(key, bytea, 0)
 	if err != nil {
 		log.Warn(
 			ctx,
@@ -53,7 +57,7 @@ func (c *userCache) Set(ctx context.Context, key string, user *domain.User) erro
 			log.Fields{
 				"reason": err,
 				"key":    key,
-				"value":  user,
+				"value":  bytea,
 			},
 		)
 		return redis.HandleError(err)
