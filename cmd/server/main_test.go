@@ -14,6 +14,7 @@ import (
 	"github.com/veljkomatic/user-account/pkg/user/api/handler"
 )
 
+// TestMain is a test main function that starts the server and runs the tests
 func TestMain(m *testing.M) {
 	// Improve this code to use test database and test configuration running in separate docker container
 	// currently it will use the same configuration as the server, which is not good for testing
@@ -24,6 +25,7 @@ func TestMain(m *testing.M) {
 	m.Run()
 }
 
+// TestFunc is a test function that tests the server
 func TestFunc(t *testing.T) {
 	ctx := context.Background()
 
