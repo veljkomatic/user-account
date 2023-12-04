@@ -10,8 +10,8 @@ build:
 	go build -o build/user_account ./cmd/server/main.go
 
 
-.PHONY: unit_test
-unit_test:
+.PHONY: test
+test:
 	@for pkg in $$(go list ./...); do \
 		go test -v -count=1 $$pkg || true; \
 	done
