@@ -12,11 +12,11 @@ User-account is a simple user account management system. It is a RESTful API tha
 ## Usage
 1. Create a user
 ```
-curl -X POST http://localhost:8000/users -H "Content-Type: application/json" -d '{"name": "YourUserName"}'
+curl -X POST http://localhost:8000/users/ -H "Content-Type: application/json" -d '{"name": "YourUserName"}'
 ```
 2. Get a user by ID
 ```
-curl -X GET http://localhost:8080/users/{userID}
+curl -X GET http://localhost:8000/users/{userID}
 ```
 
 ## Testing
