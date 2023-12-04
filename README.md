@@ -79,8 +79,7 @@ Data for production configuration is placed in config.prod.yaml file. Currently 
 Data for canary configuration is placed in config.canary.yaml file. Currently empty.
 
 ### Diagram
-![Screenshot 2023-12-04 at 03.37.51.png](..%2FDesktop%2FScreenshot%202023-12-04%20at%2003.37.51.png)
-
+![digram.png](digram.png)
 ### Database
 Postgres database is used for storing user data.
 
